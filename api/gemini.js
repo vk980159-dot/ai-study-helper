@@ -1,30 +1,54 @@
 export default async function handler(req, res) {
 
-const apiKey = process.env.GEMINI_API_KEY;
+  try {
 
-const { text } = req.body;
+    const apiKey = process.env.GEMINI_API_KEY;
 
-const response = await fetch(
-"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + apiKey,
-{
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-contents: [
-{
-parts: [{ text: "Summarize this study text: " + text }]
-}
-]
-})
-}
-);
+    const { text } = req.body;
 
-const data = await response.json();
+    if (!text) {
+      return res.status(400).json({ error: "No text provided" });
+    }
 
-const result = data.candidates[0].content.parts[0].text;
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + apiKey,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: "Explain this topic in simple student-friendly notes:\n" + text
+                }
+              ]
+            }
+          ]
+        })
+      }
+    );
 
-res.status(200).json({ result });
+    const data = await response.json();
+
+    console.log(data);
+
+    const result =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "AI could not generate response.";
+
+    res.status(200).json({ result });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      result: "Server error generating notes"
+    });
+
+  }
 
 }

@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Study Helper</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>AI Study Helper</h1>
+
+<textarea id="inputText" rows="6" cols="80"
+placeholder="Paste study text"></textarea>
+
+<br><br>
+
+<button onclick="generateNotes()">Generate Notes</button>
+
+<h2 id="output"></h2>
+
 <script>
 
 async function generateNotes(){
@@ -16,8 +36,11 @@ text:text
 
 const data = await response.json();
 
-document.getElementById("output").innerText = data.result;
+document.getElementById("output").innerText = "Summary: " + data.result;
 
 }
 
 </script>
+
+</body>
+</html>

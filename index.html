@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <title>AI Study Helper</title>
 
 <style>
@@ -44,7 +43,7 @@ margin-right:auto;
 
 <h1>AI Study Helper</h1>
 
-<textarea id="inputText" placeholder="Enter topic to explain..."></textarea>
+<textarea id="inputText" placeholder="Enter topic"></textarea>
 
 <br>
 
@@ -56,13 +55,11 @@ margin-right:auto;
 
 async function generateNotes(){
 
-const text=document.getElementById("inputText").value;
+let text=document.getElementById("inputText").value;
 
 document.getElementById("output").innerHTML="Generating...";
 
-try{
-
-const response=await fetch("/api/gemini",{
+let response=await fetch("/api/gemini",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -70,15 +67,9 @@ headers:{
 body:JSON.stringify({text:text})
 });
 
-const data=await response.json();
+let data=await response.json();
 
 document.getElementById("output").innerHTML=data.result;
-
-}catch(error){
-
-document.getElementById("output").innerHTML="Error generating notes";
-
-}
 
 }
 

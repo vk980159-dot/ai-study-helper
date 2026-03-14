@@ -3,7 +3,6 @@ export default async function handler(req, res) {
   try {
 
     const apiKey = process.env.GEMINI_API_KEY;
-
     const { text } = req.body;
 
     const response = await fetch(
@@ -17,9 +16,7 @@ export default async function handler(req, res) {
           contents: [
             {
               parts: [
-                {
-                  text: "Explain this topic in simple student notes: " + text
-                }
+                { text: "Explain in simple student notes: " + text }
               ]
             }
           ]
@@ -29,10 +26,16 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    const result = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    let result = "";
+
+    if (data.candidates && data.candidates.length > 0) {
+      result = data.candidates[0].content.parts
+        .map(p => p.text)
+        .join("");
+    }
 
     res.status(200).json({
-      result: result || "AI did not return text"
+      result: result || "No response generated"
     });
 
   } catch (error) {

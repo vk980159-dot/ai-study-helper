@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AI Study Helper</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>AI Study Helper</h1>
+
+    <textarea id="inputText" placeholder="Paste study text"></textarea>
+
+    <br>
+
+    <button onclick="generateNotes()">Generate Notes</button>
+
+    <h2 id="output"></h2>
+
+    <script>
+        function generateNotes() {
+
+            let text = document.getElementById("inputText").value;
+
+            let result = "Summary: " + text.substring(0, 120);
+
+            document.getElementById("output").innerText = result;
+
+        }
+    </script>
+
+</body>
+
+</html>

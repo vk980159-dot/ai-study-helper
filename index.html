@@ -1,35 +1,23 @@
-<!DOCTYPE html>
-<html>
+<script>
 
-<head>
-    <title>AI Study Helper</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+async function generateNotes(){
 
-<body>
+let text = document.getElementById("inputText").value;
 
-    <h1>AI Study Helper</h1>
+let response = await fetch("/api/gemini",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+text:text
+})
+});
 
-    <textarea id="inputText" placeholder="Paste study text"></textarea>
+let data = await response.json();
 
-    <br>
+document.getElementById("output").innerText=data.result;
 
-    <button onclick="generateNotes()">Generate Notes</button>
+}
 
-    <h2 id="output"></h2>
-
-    <script>
-        function generateNotes() {
-
-            let text = document.getElementById("inputText").value;
-
-            let result = "Summary: " + text.substring(0, 120);
-
-            document.getElementById("output").innerText = result;
-
-        }
-    </script>
-
-</body>
-
-</html>
+</script>

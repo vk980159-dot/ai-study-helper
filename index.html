@@ -1,22 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+<meta charset="UTF-8">
 <title>AI Study Helper</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+font-family: Arial;
+text-align:center;
+background:#f5f5f5;
+padding:40px;
+}
+
+h1{
+margin-bottom:30px;
+}
+
+textarea{
+width:80%;
+height:150px;
+padding:10px;
+font-size:16px;
+}
+
+button{
+margin-top:20px;
+padding:10px 20px;
+font-size:16px;
+cursor:pointer;
+}
+
+#output{
+margin-top:30px;
+font-size:18px;
+width:80%;
+margin-left:auto;
+margin-right:auto;
+background:white;
+padding:20px;
+border-radius:6px;
+}
+
+</style>
 </head>
 
 <body>
 
 <h1>AI Study Helper</h1>
 
-<textarea id="inputText" rows="6" cols="80"
-placeholder="Paste study text"></textarea>
+<textarea id="inputText" placeholder="Paste your study topic here"></textarea>
 
-<br><br>
+<br>
 
 <button onclick="generateNotes()">Generate Notes</button>
 
-<h2 id="output"></h2>
+<div id="output"></div>
 
 <script>
 
@@ -24,19 +64,32 @@ async function generateNotes(){
 
 const text = document.getElementById("inputText").value;
 
+if(!text){
+alert("Please enter some text");
+return;
+}
+
+document.getElementById("output").innerText="Generating notes...";
+
+try{
+
 const response = await fetch("/api/gemini",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify({
-text:text
-})
+body:JSON.stringify({text})
 });
 
 const data = await response.json();
 
-document.getElementById("output").innerText = "Summary: " + data.result;
+document.getElementById("output").innerText = data.result;
+
+}catch(error){
+
+document.getElementById("output").innerText="Error generating notes";
+
+}
 
 }
 
